@@ -1,0 +1,62 @@
+<!-- １対多で、文章と画像それぞれ保存 -->
+<!-- 作成順は、index_ajax/content(ajaxで複数画像保存) → index-copy(<form>で複数画像保存) → editorjs_plugin(プラグインの動作テスト) → index(note42週目の3の最後。エディタ内の画像を<form>で保存) -->
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>簡易掲示板</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="{% static 'js/script.js' %}"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
+    <script src="{% static 'js/editorjs_plugin.js' %}"></script>
+    <link href="{% static 'css/editorjs_plugin.css' %}" rel="stylesheet"/>
+</head>
+
+<body>
+    <main class="container">
+        <form id="form_area" action="" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <textarea id="textarea" class="form-control" name="comment"></textarea>
+
+            <!--TODO:後はこの部分をJSで増やしたり減らしたりする。-->
+            <!-- <div id="image_input_area">
+                <input class="image_input" type="file" name="image">
+            </div> -->
+
+            <div id="editorjs" style="max-width: 1000px; margin: 0 auto"></div>
+
+            <input id="submit" type="submit" value="送信">
+        </form>
+
+        <div id="content_area">{% include "testapp/content.html" %}</div>
+
+    </main>
+</body>
+
+
+<script>
+'use strict';
+
+// 初期化
+const editor = new EditorJS({
+    autofocus: true,
+    tools: {
+        image: {
+            class: SimpleImage,
+            inlineToolbar: true,
+            config: {
+                placeholder: 'Paste image URL'
+            }
+        }
+    },
+});
+
+</script>
+</html>
